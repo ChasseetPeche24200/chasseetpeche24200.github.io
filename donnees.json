@@ -13,6 +13,21 @@
   },
   "listings": [
     {
+      "id": "mwdk3l7r",
+      "title": "Mossberg ATR-100, 308 Win, lunette Vortex et modérateur",
+      "caliber": "308 Winchester",
+      "price": "500",
+      "category": "C1 b",
+      "condition": "",
+      "description": "Carabine à verrou Mossberg ATR-100, calibre 308 Winchester.\nÉquipée d’une lunette Vortex Crossfire 3-9x40 sur colliers et d’un modérateur de son Schultz & Larsen.\nVendue complète, le tout au prix indiqué.",
+      "photos": [
+        "mwdk3l7r-1.jpg",
+        "mwdk3l7r-2.jpg"
+      ],
+      "sold": false,
+      "date": "2026-11-12"
+    },
+    {
       "id": "mwdh7s1z",
       "title": "Fabarm Elos 20, superposé calibre 20",
       "caliber": "20/76",
