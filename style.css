@@ -9,7 +9,27 @@ a{color:inherit}
 img{max-width:100%;display:block}
 :focus-visible{outline:3px solid var(--stone);outline-offset:2px}
 .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-.hero{background:var(--forest);color:var(--forest-ink);padding:56px 0 48px}
+.topnav{position:sticky;top:0;z-index:30;background:var(--forest);color:var(--forest-ink);border-bottom:1px solid rgba(241,231,207,.15);padding-top:env(safe-area-inset-top,0px)}
+.topnav .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:58px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+.brand img{flex:none;width:40px;height:40px}
+.topbar .brand img{width:48px;height:48px}
+.brand span{font:700 18px/1.1 Bitter,Georgia,serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand em{font-style:normal;color:var(--stone)}
+.navlinks{display:flex;align-items:center;gap:16px;font-weight:600;font-size:15px}
+.navlinks a{text-decoration:none;opacity:.9}
+.navlinks a:hover{opacity:1;text-decoration:underline}
+.navlinks .call{background:var(--stone);color:#1E2420;padding:7px 12px;border-radius:4px;opacity:1}
+@media (max-width:560px){.navlinks a:not(.call){display:none}.brand span{font-size:16px}}
+.hero{background:var(--forest);color:var(--forest-ink);padding:48px 0 48px}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:center}
+.hero-logo{width:min(280px,70vw);height:auto;justify-self:center;order:-1;filter:drop-shadow(0 8px 22px rgba(0,0,0,.35))}
+@media (min-width:860px){.hero-grid{grid-template-columns:1fr 400px}.hero-logo{width:400px;order:0}}
+.kicker{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.kicker span{font-weight:600;font-size:13px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border:1px solid rgba(201,162,75,.6);border-radius:999px;color:var(--stone)}
+.foot{display:flex;align-items:center;gap:16px;line-height:1.5}
+.foot img{width:72px;height:72px;flex:none}
+.foot strong{color:var(--ink);font-family:Bitter,Georgia,serif}
 .mark{font-size:clamp(52px,14vw,124px);font-weight:800;letter-spacing:-.02em;color:var(--stone)}
 .mark span{display:block;font-weight:500;font-size:.46em;letter-spacing:.01em;color:var(--forest-ink)}
 .lede{max-width:34em;margin:20px 0 28px;font-size:19px;opacity:.9}
