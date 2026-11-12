@@ -33,9 +33,10 @@ document.getElementById('root').innerHTML=
 (s.phone?'<a class="ccard" href="tel:'+esc(tel)+'"><span class="ccard-k">Téléphone</span><span class="ccard-v">'+esc(s.phone)+'</span></a>':'')+
 (s.email?'<a class="ccard" href="mailto:'+esc(s.email)+'"><span class="ccard-k">E-mail</span><span class="ccard-v">'+esc(s.email)+'</span></a>':'')+
 '<a class="ccard" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'"><span class="ccard-k">Adresse · itinéraire</span><span class="ccard-v">'+esc(s.address)+'<br>'+esc(s.city)+'</span></a>'+
+'<a class="ccard" target="_blank" rel="noopener" href="https://www.facebook.com/p/Sarlat-Chasse-P%C3%AAche-100021199047154/"><span class="ccard-k">Facebook</span><span class="ccard-v">Actualités et arrivages</span></a>'+
 '</div><h3 style="font-size:22px;margin:28px 0 8px">Horaires</h3><table class="hours">'+hoursTable()+'</table></div>'+
 '</div></section></main>'+
-'<footer><div class="wrap foot"><img src="images/logo-180.png" alt="" width="72" height="72"><div><strong>Sarlat Chasse &amp; Pêche</strong><br>Armurerie et articles de pêche<br>'+esc(s.city)+'</div></div></footer>';
+'<footer><div class="wrap foot"><img src="images/logo-180.png" alt="" width="72" height="72"><div><strong>Sarlat Chasse &amp; Pêche</strong><br>Armurerie et articles de pêche<br>'+esc(s.city)+'<br><a href="https://www.facebook.com/p/Sarlat-Chasse-P%C3%AAche-100021199047154/" target="_blank" rel="noopener">Suivez-nous sur Facebook</a></div></div></footer>';
 document.getElementById('cf').onsubmit=send}
 function hoursTable(){return [1,2,3,4,5,6,0].map(function(d){var h=HOURS[d];return '<tr class="'+(h?'':'off')+'"><td>'+DAYS[d]+'</td><td>'+(h?h.map(function(x){return hm(x[0])+' – '+hm(x[1])}).join(', '):'Fermé')+'</td></tr>'}).join('')}
 function v(id){return document.getElementById(id).value.trim()}
