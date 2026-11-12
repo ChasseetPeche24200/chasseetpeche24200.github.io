@@ -10,7 +10,7 @@
 </head><body><div id="root"></div>
 <script src="common.js"></script>
 <script>
-var DATA={shop:{address:'130 avenue Joséphine Baker, Centre commercial du Pontet',city:'24200 Sarlat-la-Canéda',phone:'05 53 29 55 89',email:'scpfaujanet@orange.fr',services:[]},listings:[]};
+var DATA={shop:{address:'130 avenue Joséphine Baker, Centre commercial Pré de Cordy',city:'24200 Sarlat-la-Canéda',phone:'05 53 29 55 89',email:'scpfaujanet@orange.fr',services:[]},listings:[]};
 var params=new URLSearchParams(location.search),about=params.get('annonce')||'';
 function listing(){return (DATA.listings||[]).filter(function(l){return l.id===about})[0]}
 function render(){var s=DATA.shop,l=listing(),q=encodeURIComponent('Sarlat Chasse Pêche '+(s.address||'')+' '+s.city),tel=(s.phone||'').replace(/\s/g,'');
@@ -29,7 +29,7 @@ document.getElementById('root').innerHTML=
 '<div style="margin-top:18px"><button class="btn" type="submit" id="c-send">Envoyer le message</button></div><div class="msg" id="msg" role="status" aria-live="polite"></div>'+
 '<p class="hint">Vous pouvez aussi écrire directement à <a href="mailto:'+esc(s.email)+'">'+esc(s.email)+'</a>.</p>'+
 '</form></div>'+
-'<div><h2>Le magasin</h2><p class="sub">Centre commercial du Pontet, à Sarlat-la-Canéda.</p><div class="contact-cards">'+
+'<div><h2>Le magasin</h2><p class="sub">Centre commercial Pré de Cordy, à Sarlat-la-Canéda.</p><div class="contact-cards">'+
 (s.phone?'<a class="ccard" href="tel:'+esc(tel)+'"><span class="ccard-k">Téléphone</span><span class="ccard-v">'+esc(s.phone)+'</span></a>':'')+
 (s.email?'<a class="ccard" href="mailto:'+esc(s.email)+'"><span class="ccard-k">E-mail</span><span class="ccard-v">'+esc(s.email)+'</span></a>':'')+
 '<a class="ccard" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'"><span class="ccard-k">Adresse · itinéraire</span><span class="ccard-v">'+esc(s.address)+'<br>'+esc(s.city)+'</span></a>'+

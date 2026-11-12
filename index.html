@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Sarlat Chasse et Pêche, armurerie et articles de pêche à Sarlat-la-Canéda</title>
-<meta name="description" content="Sarlat Chasse et Pêche, Centre commercial du Pontet à Sarlat-la-Canéda : armurerie, armes de chasse neuves et d’occasion, munitions, réparation, matériel et articles de pêche.">
+<meta name="description" content="Sarlat Chasse et Pêche, Centre commercial Pré de Cordy à Sarlat-la-Canéda : armurerie, armes de chasse neuves et d’occasion, munitions, réparation, matériel et articles de pêche.">
 <link rel="icon" type="image/png" href="images/logo-64.png">
 <link rel="apple-touch-icon" href="images/logo-180.png">
 <meta property="og:title" content="Sarlat Chasse et Pêche">
-<meta property="og:description" content="Armurerie et articles de pêche à Sarlat-la-Canéda, Centre commercial du Pontet.">
+<meta property="og:description" content="Armurerie et articles de pêche à Sarlat-la-Canéda, Centre commercial Pré de Cordy.">
 <meta property="og:image" content="https://sarlat-chasse-tir.fr/images/logo.png">
 <meta property="og:url" content="https://sarlat-chasse-tir.fr/">
 <link rel="canonical" href="https://sarlat-chasse-tir.fr/">
@@ -16,7 +16,7 @@
 </head><body><div id="root"></div>
 <script src="common.js"></script>
 <script>
-var DATA={shop:{address:'130 avenue Joséphine Baker, Centre commercial du Pontet',city:'24200 Sarlat-la-Canéda',phone:'05 53 29 55 89',email:'scpfaujanet@orange.fr',services:['Armes de chasse neuves et d’occasion','Munitions et accessoires','Réparation, entretien et réglage des armes','Matériel de pêche']},listings:[]};
+var DATA={shop:{address:'130 avenue Joséphine Baker, Centre commercial Pré de Cordy',city:'24200 Sarlat-la-Canéda',phone:'05 53 29 55 89',email:'scpfaujanet@orange.fr',services:['Armes de chasse neuves et d’occasion','Munitions et accessoires','Réparation, entretien et réglage des armes','Matériel de pêche']},listings:[]};
 function parisNow(){var p={};new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).forEach(function(x){p[x.type]=x.value});return{d:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(p.weekday),m:Number(p.hour)*60+Number(p.minute)}}
 function status(){var n=parisNow(),t=HOURS[n.d]||[];for(var i=0;i<t.length;i++){if(n.m>=t[i][0]&&n.m<t[i][1])return{open:true,text:'Ouvert, jusqu’à '+hm(t[i][1])};if(n.m<t[i][0])return{open:false,text:'Fermé, ouvre à '+hm(t[i][0])}}for(var k=1;k<=7;k++){var d=(n.d+k)%7;if(HOURS[d])return{open:false,text:'Fermé, ouvre '+(k===1?'demain':DAYS[d].toLowerCase())+' à '+hm(HOURS[d][0][0])}}return{open:false,text:'Fermé'}}
 function hoursRows(){var n=parisNow();return [1,2,3,4,5,6,0].map(function(d){var h=HOURS[d];return '<tr class="'+(d===n.d?'today ':'')+(h?'':'off')+'"><td>'+DAYS[d]+'</td><td>'+(h?h.map(function(s){return hm(s[0])+' – '+hm(s[1])}).join(', '):'Fermé')+'</td></tr>'}).join('')}
