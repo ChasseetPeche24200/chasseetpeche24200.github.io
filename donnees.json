@@ -11,5 +11,23 @@
       "Matériel de pêche"
     ]
   },
-  "listings": []
+  "listings": [
+    {
+      "id": "mwdh7s1z",
+      "title": "Fabarm Elos 20, superposé calibre 20",
+      "caliber": "20/76",
+      "price": "1000",
+      "category": "C",
+      "condition": "",
+      "description": "Fusil superposé Fabarm Elos, calibre 20, chambré 76.\nCanons de 70 cm, chokes interchangeables HP.\nBascule gravée, crosse et devant en noyer quadrillé.",
+      "photos": [
+        "mwdh7s1z-1.jpg",
+        "mwdh7s1z-2.jpg",
+        "mwdh7s1z-3.jpg",
+        "mwdh7s1z-4.jpg"
+      ],
+      "sold": false,
+      "date": "2026-11-12"
+    }
+  ]
 }
