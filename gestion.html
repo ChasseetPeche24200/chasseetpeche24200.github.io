@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>Gestion du site, Sarlat Chasse Pêche</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛠️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head><body><div class="wrap" style="max-width:760px">
+<div class="topbar"><h1 style="font-size:26px">Gestion du site</h1><a class="btn small ghost" href="./">Voir le site</a></div>
+<div id="app"></div></div>
+<script src="common.js"></script>
+<script>
+var KEY='scp-github',CFG=null,STATE={data:null,sha:null},pending=[];
+try{CFG=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+function guess(){var h=location.hostname,o='',r='';if(/\.github\.io$/.test(h)){o=h.split('.')[0];var seg=location.pathname.split('/')[1];r=(seg&&!/\.html$/.test(seg))?seg:h}return{owner:o,repo:r}}
+function $(id){return document.getElementById(id)}
+function val(id){return $(id).value.trim()}
+function msg(t,err){var m=$('msg');if(m){m.textContent=t;m.className='msg'+(err?' err':'')}}
+function busy(on){Array.prototype.forEach.call(document.querySelectorAll('#app button,#app input,#app select,#app textarea'),function(x){x.disabled=on})}
+function errText(e){if(!e||!e.status)return 'Pas de connexion internet, ou GitHub ne répond pas.';if(e.status===401)return 'Jeton invalide ou expiré. Créez-en un nouveau dans « Paramètres GitHub ».';if(e.status===403||e.status===404)return 'Le jeton n’a pas accès à ce dépôt. Vérifiez le nom du dépôt et le droit « Contents : Read and write ».';if(e.status===409||e.status===422)return 'Une autre modification était en cours, réessayez.';return 'Erreur GitHub ('+e.status+(e.detail?' : '+e.detail:'')+').'}
+async function gh(method,path,body){var r;try{r=await fetch('https://api.github.com/repos/'+CFG.owner+'/'+CFG.repo+path,{method:method,headers:{'Authorization':'Bearer '+CFG.token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},body:body?JSON.stringify(body):undefined,cache:'no-store'})}catch(x){throw {status:0}}
+if(!r.ok){var e={status:r.status};try{e.detail=(await r.json()).message}catch(x){}throw e}return r.status===204?null:r.json()}
+function b64(bytes){var s='';for(var i=0;i<bytes.length;i+=0x8000)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));return btoa(s)}
+function fromB64(t){var bin=atob(t.replace(/\n/g,'')),u=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return new TextDecoder().decode(u)}
+async function load(){try{var j=await gh('GET','/contents/donnees.json');STATE.data=JSON.parse(fromB64(j.content));STATE.sha=j.sha}catch(e){if(e.status===404){STATE.data={shop:{address:'',city:'24200 Sarlat-la-Canéda',phone:'',email:'',services:[]},listings:[]};STATE.sha=null}else throw e}
+STATE.data.listings=(STATE.data.listings||[]).map(function(l,i){if(!l.id)l.id='a'+i+Date.now().toString(36);return l})}
+async function put(message){var body={message:message,content:b64(new TextEncoder().encode(JSON.stringify(STATE.data,null,2)))};if(STATE.sha)body.sha=STATE.sha;var r=await gh('PUT','/contents/donnees.json',body);STATE.sha=r.content.sha}
+async function mutate(fn,label,ok){busy(true);msg('Enregistrement…');try{await load();fn(STATE.data);await put(label);msg(ok+' Le site sera à jour d’ici une à deux minutes.');return true}catch(e){msg(errText(e),true);return false}finally{busy(false)}}
+
+function setup(){var g=CFG||guess();
+$('app').innerHTML='<div class="setup"><h2 style="font-size:22px">Relier cette page à GitHub</h2><p class="hint">À faire une seule fois sur chaque appareil (téléphone, ordinateur). Le jeton reste uniquement sur cet appareil.</p>'+
+'<label for="s-owner">Nom d’utilisateur GitHub</label><input id="s-owner" value="'+esc(g.owner)+'" autocapitalize="off">'+
+'<label for="s-repo">Nom du dépôt</label><input id="s-repo" value="'+esc(g.repo)+'" autocapitalize="off" placeholder="sarlatchassepeche.github.io">'+
+'<label for="s-token">Jeton d’accès (commence par github_pat_)</label><input id="s-token" type="password" autocomplete="off" value="">'+
+'<p class="hint">Pour le créer : <a target="_blank" rel="noopener" href="https://github.com/settings/personal-access-tokens/new">github.com/settings/personal-access-tokens/new</a>. Choisissez « Only select repositories » avec votre dépôt, puis dans « Repository permissions », mettez « Contents » sur « Read and write ».</p>'+
+'<div style="margin-top:16px"><button class="btn" id="s-go">Tester et enregistrer</button></div><div class="msg" id="msg"></div></div>';
+$('s-go').onclick=async function(){CFG={owner:val('s-owner'),repo:val('s-repo'),token:val('s-token')};if(!CFG.owner||!CFG.repo||!CFG.token){msg('Remplissez les trois champs.',true);return}
+busy(true);msg('Vérification…');try{var r=await gh('GET','');if(!(r.permissions&&r.permissions.push)){msg('Le jeton n’a pas le droit d’écrire dans ce dépôt (« Contents : Read and write »).',true);busy(false);return}try{localStorage.setItem(KEY,JSON.stringify(CFG))}catch(e){}main()}catch(e){msg(errText(e),true);busy(false)}}}
+
+async function main(){$('app').innerHTML='<p class="msg">Chargement…</p>';try{await load()}catch(e){$('app').innerHTML='<p class="msg err">'+errText(e)+'</p><button class="btn small ghost" id="reset">Changer de jeton</button>';$('reset').onclick=forget;return}
+$('app').innerHTML='<div class="tabs" role="tablist"><button role="tab" data-t="new" aria-selected="true">Nouvelle annonce</button><button role="tab" data-t="list" aria-selected="false">Mes annonces</button><button role="tab" data-t="info" aria-selected="false">Infos du magasin</button></div><div id="pane"></div><p style="margin-top:40px"><button class="btn small ghost" id="reset">Déconnecter cet appareil</button></p>';
+$('reset').onclick=forget;
+Array.prototype.forEach.call(document.querySelectorAll('.tabs button'),function(t){t.onclick=function(){Array.prototype.forEach.call(document.querySelectorAll('.tabs button'),function(x){x.setAttribute('aria-selected',x===t)});pane(t.dataset.t)}});pane('new')}
+function forget(){if(!confirm('Retirer le jeton de cet appareil ?'))return;try{localStorage.removeItem(KEY)}catch(e){}CFG=null;setup()}
+
+function pane(t){var p=$('pane');
+if(t==='new'){pending=[];p.innerHTML='<label for="f-title">Titre de l’annonce</label><input id="f-title" placeholder="Ex. Browning BAR MK3, 30-06">'+
+'<div class="row"><div><label for="f-cal">Calibre</label><input id="f-cal" placeholder="30-06, 12/70…"></div><div><label for="f-price">Prix (€)</label><input id="f-price" type="number" inputmode="numeric" min="0"></div></div>'+
+'<div class="row"><div><label for="f-cat">Catégorie</label><select id="f-cat"><option value="">Non précisée</option><option>C</option><option>B</option><option>D</option></select></div><div><label for="f-cond">État</label><select id="f-cond"><option>Très bon état</option><option>Bon état</option><option>État correct</option><option>Comme neuf</option><option>Pour pièces</option></select></div></div>'+
+'<label for="f-desc">Description</label><textarea id="f-desc" placeholder="Longueur de canon, crosse, optique fournie, révision faite…"></textarea>'+
+'<label for="f-ph">Photos</label><input id="f-ph" type="file" accept="image/*" multiple><p class="hint">Plusieurs photos possibles, réduites automatiquement avant l’envoi.</p><div class="thumbs" id="thumbs"></div>'+
+'<div style="margin-top:20px"><button class="btn" id="f-save">Publier l’annonce</button></div><div class="msg" id="msg"></div>';
+$('f-ph').onchange=async function(e){var fs=Array.prototype.slice.call(e.target.files);e.target.value='';for(var i=0;i<fs.length;i++){msg('Préparation de la photo '+(i+1)+' sur '+fs.length+'…');var b=await compress(fs[i]);pending.push({blob:b,url:URL.createObjectURL(b)});drawThumbs()}msg(pending.length+' photo(s) prête(s).')};
+$('f-save').onclick=async function(){var title=val('f-title');if(!title){msg('Indiquez au moins un titre.',true);return}
+busy(true);var names=[],stamp=Date.now().toString(36);try{for(var i=0;i<pending.length;i++){msg('Envoi de la photo '+(i+1)+' sur '+pending.length+'…');var name=stamp+'-'+(i+1)+'.jpg',bytes=new Uint8Array(await pending[i].blob.arrayBuffer());await gh('PUT','/contents/photos/'+name,{message:'Photo '+title,content:b64(bytes)});names.push(name)}}catch(e){msg(errText(e),true);busy(false);return}
+busy(false);var item={id:stamp,title:title,caliber:val('f-cal'),price:val('f-price'),category:val('f-cat'),condition:val('f-cond'),description:$('f-desc').value.trim(),photos:names,sold:false,date:new Date().toISOString().slice(0,10)};
+if(await mutate(function(d){d.listings.unshift(item)},'Annonce : '+title,'Annonce publiée.'))pane('new'),msg('Annonce publiée. Le site sera à jour d’ici une à deux minutes.')}}
+if(t==='list'){var L=STATE.data.listings;p.innerHTML=L.length?'<div class="adm-list">'+L.map(function(l){return '<div class="li">'+(l.photos&&l.photos.length?'<img alt="" src="'+img(l.photos[0])+'">':'<div class="noimg"></div>')+'<div class="t"><strong>'+esc(l.title)+'</strong><div class="meta">'+(l.sold?'Vendu':euro(l.price)||'Sans prix')+'</div></div><div class="acts"><button class="btn small ghost" data-sold="'+esc(l.id)+'">'+(l.sold?'Remettre en vente':'Marquer vendu')+'</button><button class="btn small danger" data-del="'+esc(l.id)+'">Supprimer</button></div></div>'}).join('')+'</div><div class="msg" id="msg"></div>':'<p class="empty">Aucune annonce pour l’instant.</p>';
+Array.prototype.forEach.call(p.querySelectorAll('[data-sold]'),function(b){b.onclick=async function(){var id=b.dataset.sold;if(await mutate(function(d){d.listings.forEach(function(l){if(l.id===id)l.sold=!l.sold})},'Statut annonce','Modifié.')){var keep=$('msg').textContent;pane('list');msg(keep)}}});
+Array.prototype.forEach.call(p.querySelectorAll('[data-del]'),function(b){b.onclick=async function(){var id=b.dataset.del,l=STATE.data.listings.filter(function(x){return x.id===id})[0];if(!l||!confirm('Supprimer « '+l.title+' » et ses photos ?'))return;
+if(await mutate(function(d){d.listings=d.listings.filter(function(x){return x.id!==id})},'Suppression : '+l.title,'Annonce supprimée.')){busy(true);for(var k=0;k<(l.photos||[]).length;k++){try{var f=await gh('GET','/contents/photos/'+l.photos[k]);await gh('DELETE','/contents/photos/'+l.photos[k],{message:'Suppression photo',sha:f.sha})}catch(e){}}busy(false);pane('list');msg('Annonce supprimée. Le site sera à jour d’ici une à deux minutes.')}}})}
+if(t==='info'){var s=STATE.data.shop;p.innerHTML='<label for="i-addr">Adresse</label><input id="i-addr" value="'+esc(s.address)+'"><label for="i-city">Code postal et ville</label><input id="i-city" value="'+esc(s.city)+'"><div class="row"><div><label for="i-phone">Téléphone</label><input id="i-phone" type="tel" value="'+esc(s.phone)+'"></div><div><label for="i-mail">E-mail</label><input id="i-mail" type="email" value="'+esc(s.email)+'"></div></div><label for="i-serv">Ce que vous proposez (une ligne par service)</label><textarea id="i-serv">'+esc((s.services||[]).join('\n'))+'</textarea><div style="margin-top:20px"><button class="btn" id="i-save">Enregistrer</button></div><div class="msg" id="msg"></div>';
+$('i-save').onclick=function(){var n={address:val('i-addr'),city:val('i-city'),phone:val('i-phone'),email:val('i-mail'),services:$('i-serv').value.split('\n').map(function(x){return x.trim()}).filter(Boolean)};mutate(function(d){d.shop=n},'Infos du magasin','Infos enregistrées.')}}}
+function drawThumbs(){var t=$('thumbs');if(!t)return;t.innerHTML=pending.map(function(x,i){return '<div><img alt="" src="'+x.url+'"><button aria-label="Retirer" data-r="'+i+'">×</button></div>'}).join('');Array.prototype.forEach.call(t.querySelectorAll('[data-r]'),function(b){b.onclick=function(){pending.splice(Number(b.dataset.r),1);drawThumbs()}})}
+async function compress(file){try{var bmp=await createImageBitmap(file,{imageOrientation:'from-image'});var s=Math.min(1,1600/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');c.width=Math.round(bmp.width*s);c.height=Math.round(bmp.height*s);c.getContext('2d').drawImage(bmp,0,0,c.width,c.height);return await new Promise(function(r){c.toBlob(function(b){r(b||file)},'image/jpeg',0.82)})}catch(e){return file}}
+if(CFG&&CFG.token)main();else setup();
+</script></body></html>

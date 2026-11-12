@@ -1,0 +1,15 @@
+{
+  "shop": {
+    "address": "130 avenue Joséphine Baker, Centre commercial du Pontet",
+    "city": "24200 Sarlat-la-Canéda",
+    "phone": "05 53 29 55 89",
+    "email": "scpfaujanet@orange.fr",
+    "services": [
+      "Armes de chasse neuves et d’occasion",
+      "Munitions et accessoires",
+      "Réparation, entretien et réglage des armes",
+      "Matériel de pêche"
+    ]
+  },
+  "listings": []
+}
