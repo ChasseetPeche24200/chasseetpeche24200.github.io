@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact, Sarlat Chasse et Pêche</title>
+<meta name="description" content="Contactez Sarlat Chasse et Pêche, armurerie et articles de pêche à Sarlat-la-Canéda : téléphone, e-mail, adresse et formulaire de question.">
+<link rel="icon" type="image/png" href="images/logo-64.png">
+<link rel="apple-touch-icon" href="images/logo-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700;800&family=Source+Sans+3:wght@400;600&display=swap">
+<link rel="stylesheet" href="style.css?v=3">
+</head><body><div id="root"></div>
+<script src="common.js"></script>
+<script>
+var DATA={shop:{address:'130 avenue Joséphine Baker, Centre commercial du Pontet',city:'24200 Sarlat-la-Canéda',phone:'05 53 29 55 89',email:'scpfaujanet@orange.fr',services:[]},listings:[]};
+var params=new URLSearchParams(location.search),about=params.get('annonce')||'';
+function listing(){return (DATA.listings||[]).filter(function(l){return l.id===about})[0]}
+function render(){var s=DATA.shop,l=listing(),q=encodeURIComponent('Sarlat Chasse Pêche '+(s.address||'')+' '+s.city),tel=(s.phone||'').replace(/\s/g,'');
+document.getElementById('root').innerHTML=
+'<nav class="topnav"><div class="wrap"><a class="brand" href="./"><img src="images/logo-64.png" alt="" width="40" height="40"><span>Sarlat Chasse <em>&amp;</em> Pêche</span></a><div class="navlinks"><a href="./#occasions">Occasions</a><a href="./#infos">Horaires</a><a href="contact.html" aria-current="page">Contact</a>'+(tel?'<a class="call" href="tel:'+esc(tel)+'">Appeler</a>':'')+'</div></div></nav>'+
+'<header class="hero hero-small"><div class="wrap"><p class="kicker"><span>Chasse</span><span>Pêche</span><span>Armurerie</span></p><h1>Nous contacter</h1><p class="lede">Une question sur une arme d’occasion, une réparation, du matériel de pêche ou une commande ? Écrivez-nous ou appelez le magasin.</p></div></header>'+
+'<main><section><div class="wrap two">'+
+'<div><h2>Votre question</h2><p class="sub">Le message s’ouvre dans votre messagerie, prêt à envoyer.</p>'+
+'<form id="cf" class="contact-form" novalidate>'+
+'<label for="c-name">Votre nom</label><input id="c-name" autocomplete="name" required>'+
+'<div class="row"><div><label for="c-phone">Téléphone</label><input id="c-phone" type="tel" autocomplete="tel" inputmode="tel"></div><div><label for="c-mail">E-mail</label><input id="c-mail" type="email" autocomplete="email"></div></div>'+
+'<label for="c-subj">Sujet</label><select id="c-subj">'+['Arme d’occasion','Arme neuve ou commande','Réparation, entretien, réglage','Munitions et accessoires','Pêche','Autre question'].map(function(x){return '<option'+(l&&x==='Arme d’occasion'?' selected':'')+'>'+x+'</option>'}).join('')+'</select>'+
+(l?'<p class="about">À propos de l’annonce : <strong>'+esc(l.title)+'</strong>'+(euro(l.price)&&!l.sold?' ('+euro(l.price)+')':'')+'</p>':'')+
+'<label for="c-msg">Message</label><textarea id="c-msg" required placeholder="'+(l?'Votre question sur cette arme…':'Votre question…')+'"></textarea>'+
+'<div style="margin-top:18px"><button class="btn" type="submit">Envoyer le message</button></div><div class="msg" id="msg" role="status"></div>'+
+'<p class="hint">Si rien ne s’ouvre, écrivez directement à <a href="mailto:'+esc(s.email)+'">'+esc(s.email)+'</a>.</p>'+
+'</form></div>'+
+'<div><h2>Le magasin</h2><p class="sub">Centre commercial du Pontet, à Sarlat-la-Canéda.</p><div class="contact-cards">'+
+(s.phone?'<a class="ccard" href="tel:'+esc(tel)+'"><span class="ccard-k">Téléphone</span><span class="ccard-v">'+esc(s.phone)+'</span></a>':'')+
+(s.email?'<a class="ccard" href="mailto:'+esc(s.email)+'"><span class="ccard-k">E-mail</span><span class="ccard-v">'+esc(s.email)+'</span></a>':'')+
+'<a class="ccard" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'"><span class="ccard-k">Adresse · itinéraire</span><span class="ccard-v">'+esc(s.address)+'<br>'+esc(s.city)+'</span></a>'+
+'</div><h3 style="font-size:22px;margin:28px 0 8px">Horaires</h3><table class="hours">'+hoursTable()+'</table></div>'+
+'</div></section></main>'+
+'<footer><div class="wrap foot"><img src="images/logo-180.png" alt="" width="72" height="72"><div><strong>Sarlat Chasse &amp; Pêche</strong><br>Armurerie et articles de pêche<br>'+esc(s.city)+'</div></div></footer>';
+document.getElementById('cf').onsubmit=send}
+function hoursTable(){return [1,2,3,4,5,6,0].map(function(d){var h=HOURS[d];return '<tr class="'+(h?'':'off')+'"><td>'+DAYS[d]+'</td><td>'+(h?h.map(function(x){return hm(x[0])+' – '+hm(x[1])}).join(', '):'Fermé')+'</td></tr>'}).join('')}
+function v(id){return document.getElementById(id).value.trim()}
+function send(e){e.preventDefault();var m=document.getElementById('msg'),name=v('c-name'),msg=v('c-msg'),phone=v('c-phone'),mail=v('c-mail'),l=listing();
+if(!name||!msg){m.className='msg err';m.textContent='Indiquez au moins votre nom et votre message.';return}
+if(!phone&&!mail){m.className='msg err';m.textContent='Laissez un téléphone ou un e-mail pour que nous puissions vous répondre.';return}
+var subj=v('c-subj')+(l?' : '+l.title:'')+' ('+name+')';
+var body=msg+'\n\n---\n'+name+(phone?'\nTél. : '+phone:'')+(mail?'\nE-mail : '+mail:'')+(l?'\nAnnonce : '+l.title+(euro(l.price)?' ('+euro(l.price)+')':''):'');
+location.href='mailto:'+DATA.shop.email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+m.className='msg';m.textContent='Votre messagerie s’ouvre avec le message prêt : il ne reste qu’à appuyer sur Envoyer.'}
+render();
+fetch('donnees.json?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j){DATA=j;var keep={};['c-name','c-phone','c-mail','c-subj','c-msg'].forEach(function(id){var el=document.getElementById(id);if(el)keep[id]=el.value});render();Object.keys(keep).forEach(function(id){if(keep[id])document.getElementById(id).value=keep[id]})}}).catch(function(){});
+</script></body></html>
