@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<html lang="fr"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://formsubmit.co; object-src 'none'; base-uri 'self'; form-action 'self'"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Contact, Sarlat Chasse et Pêche</title>
 <meta name="description" content="Contactez Sarlat Chasse et Pêche, armurerie et articles de pêche à Sarlat-la-Canéda : téléphone, e-mail, adresse et formulaire de question.">
 <link rel="icon" type="image/png" href="images/logo-64.png">
@@ -18,15 +18,16 @@ document.getElementById('root').innerHTML=
 '<nav class="topnav"><div class="wrap"><a class="brand" href="./"><img src="images/logo-64.png" alt="" width="40" height="40"><span>Sarlat Chasse <em>&amp;</em> Pêche</span></a><div class="navlinks"><a href="./#occasions">Occasions</a><a href="./#infos">Horaires</a><a href="contact.html" aria-current="page">Contact</a>'+(tel?'<a class="call" href="tel:'+esc(tel)+'">Appeler</a>':'')+'</div></div></nav>'+
 '<header class="hero hero-small"><div class="wrap"><p class="kicker"><span>Chasse</span><span>Pêche</span><span>Armurerie</span></p><h1>Nous contacter</h1><p class="lede">Une question sur une arme d’occasion, une réparation, du matériel de pêche ou une commande ? Écrivez-nous ou appelez le magasin.</p></div></header>'+
 '<main><section><div class="wrap two">'+
-'<div><h2>Votre question</h2><p class="sub">Le message s’ouvre dans votre messagerie, prêt à envoyer.</p>'+
+'<div><h2>Votre question</h2><p class="sub">Votre message nous est envoyé directement. Nous vous répondons par téléphone ou par e-mail.</p>'+
 '<form id="cf" class="contact-form" novalidate>'+
 '<label for="c-name">Votre nom</label><input id="c-name" autocomplete="name" required>'+
 '<div class="row"><div><label for="c-phone">Téléphone</label><input id="c-phone" type="tel" autocomplete="tel" inputmode="tel"></div><div><label for="c-mail">E-mail</label><input id="c-mail" type="email" autocomplete="email"></div></div>'+
 '<label for="c-subj">Sujet</label><select id="c-subj">'+['Arme d’occasion','Arme neuve ou commande','Réparation, entretien, réglage','Munitions et accessoires','Pêche','Autre question'].map(function(x){return '<option'+(l&&x==='Arme d’occasion'?' selected':'')+'>'+x+'</option>'}).join('')+'</select>'+
 (l?'<p class="about">À propos de l’annonce : <strong>'+esc(l.title)+'</strong>'+(euro(l.price)&&!l.sold?' ('+euro(l.price)+')':'')+'</p>':'')+
 '<label for="c-msg">Message</label><textarea id="c-msg" required placeholder="'+(l?'Votre question sur cette arme…':'Votre question…')+'"></textarea>'+
-'<div style="margin-top:18px"><button class="btn" type="submit">Envoyer le message</button></div><div class="msg" id="msg" role="status"></div>'+
-'<p class="hint">Si rien ne s’ouvre, écrivez directement à <a href="mailto:'+esc(s.email)+'">'+esc(s.email)+'</a>.</p>'+
+'<div aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden"><label for="c-web">Ne pas remplir</label><input id="c-web" tabindex="-1" autocomplete="off"></div>'+
+'<div style="margin-top:18px"><button class="btn" type="submit" id="c-send">Envoyer le message</button></div><div class="msg" id="msg" role="status" aria-live="polite"></div>'+
+'<p class="hint">Vous pouvez aussi écrire directement à <a href="mailto:'+esc(s.email)+'">'+esc(s.email)+'</a>.</p>'+
 '</form></div>'+
 '<div><h2>Le magasin</h2><p class="sub">Centre commercial du Pontet, à Sarlat-la-Canéda.</p><div class="contact-cards">'+
 (s.phone?'<a class="ccard" href="tel:'+esc(tel)+'"><span class="ccard-k">Téléphone</span><span class="ccard-v">'+esc(s.phone)+'</span></a>':'')+
@@ -38,13 +39,24 @@ document.getElementById('root').innerHTML=
 document.getElementById('cf').onsubmit=send}
 function hoursTable(){return [1,2,3,4,5,6,0].map(function(d){var h=HOURS[d];return '<tr class="'+(h?'':'off')+'"><td>'+DAYS[d]+'</td><td>'+(h?h.map(function(x){return hm(x[0])+' – '+hm(x[1])}).join(', '):'Fermé')+'</td></tr>'}).join('')}
 function v(id){return document.getElementById(id).value.trim()}
-function send(e){e.preventDefault();var m=document.getElementById('msg'),name=v('c-name'),msg=v('c-msg'),phone=v('c-phone'),mail=v('c-mail'),l=listing();
-if(!name||!msg){m.className='msg err';m.textContent='Indiquez au moins votre nom et votre message.';return}
-if(!phone&&!mail){m.className='msg err';m.textContent='Laissez un téléphone ou un e-mail pour que nous puissions vous répondre.';return}
-var subj=v('c-subj')+(l?' : '+l.title:'')+' ('+name+')';
-var body=msg+'\n\n---\n'+name+(phone?'\nTél. : '+phone:'')+(mail?'\nE-mail : '+mail:'')+(l?'\nAnnonce : '+l.title+(euro(l.price)?' ('+euro(l.price)+')':''):'');
-location.href='mailto:'+DATA.shop.email+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
-m.className='msg';m.textContent='Votre messagerie s’ouvre avec le message prêt : il ne reste qu’à appuyer sur Envoyer.'}
+var sending=false;
+function say(t,err){var m=document.getElementById('msg');m.className='msg'+(err?' err':'');m.textContent=t}
+function send(e){e.preventDefault();if(sending)return;var name=v('c-name'),msg=v('c-msg'),phone=v('c-phone'),mail=v('c-mail'),l=listing(),btn=document.getElementById('c-send');
+if(!name||!msg){say('Indiquez au moins votre nom et votre message.',true);return}
+if(!phone&&!mail){say('Laissez un téléphone ou un e-mail pour que nous puissions vous répondre.',true);return}
+if(mail&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(mail)){say('L’adresse e-mail ne semble pas correcte.',true);return}
+if(v('c-web')){say('Message envoyé. Merci !');return}
+var payload={_subject:'Site : '+v('c-subj')+(l?' : '+l.title:'')+' ('+name+')',_template:'table',_captcha:'false',Nom:name,Telephone:phone||'(non indiqué)','E-mail':mail||'(non indiqué)',Sujet:v('c-subj'),Message:msg};
+if(l)payload.Annonce=l.title+(euro(l.price)?' ('+euro(l.price)+')':'');
+if(mail)payload._replyto=mail;
+sending=true;btn.disabled=true;btn.textContent='Envoi en cours…';say('');
+fetch('https://formsubmit.co/ajax/'+encodeURIComponent(DATA.shop.email),{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)})
+.then(function(r){return r.json().catch(function(){return {success:r.ok?'true':'false'}})})
+.then(function(j){if(String(j.success)==='true'){document.getElementById('cf').reset();say('✓ Merci '+name+', votre message est bien envoyé. Nous vous répondons au plus vite.')}
+else if(/activ/i.test(j.message||'')){say('Le formulaire est en cours d’activation par le magasin. En attendant, appelez le '+DATA.shop.phone+' ou écrivez à '+DATA.shop.email+'.',true)}
+else{throw new Error(j.message||'refus')}})
+.catch(function(){say('Le message n’a pas pu partir. Réessayez dans un instant, ou appelez le '+DATA.shop.phone+'.',true)})
+.then(function(){sending=false;btn.disabled=false;btn.textContent='Envoyer le message'})}
 render();
 fetch('donnees.json?v='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null}).then(function(j){if(j){DATA=j;var keep={};['c-name','c-phone','c-mail','c-subj','c-msg'].forEach(function(id){var el=document.getElementById(id);if(el)keep[id]=el.value});render();Object.keys(keep).forEach(function(id){if(keep[id])document.getElementById(id).value=keep[id]})}}).catch(function(){});
 </script></body></html>
