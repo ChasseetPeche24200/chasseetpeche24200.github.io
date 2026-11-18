@@ -13,6 +13,22 @@
   },
   "listings": [
     {
+      "id": "mwm8gs01",
+      "title": "Marlin 336, 30-30 Win, marquage JM",
+      "caliber": "30-30 Winchester",
+      "price": "1000",
+      "category": "C1 b",
+      "condition": "Assez bon état",
+      "description": "Carabine à levier de sous-garde Marlin 336, calibre 30-30 Winchester.\nCanon de 51 cm, marqué du sigle « JM », gage d’une canonnerie de très bonne qualité.\nCarcasse taraudée pour le montage d’une embase.\nBois revernis.",
+      "photos": [
+        "mwm8gs01-1.jpg",
+        "mwm8gs01-2.jpg",
+        "mwm8gs01-3.jpg"
+      ],
+      "sold": false,
+      "date": "2026-11-18"
+    },
+    {
       "id": "mwdk3l7r",
       "title": "Mossberg ATR-100, 308 Win, lunette Vortex et modérateur",
       "caliber": "308 Winchester",
