@@ -13,6 +13,22 @@
   },
   "listings": [
     {
+      "id": "mwnjwqei",
+      "title": "Baïkal IJ-18, 222 Rem, lunette Barska et modérateur",
+      "caliber": "222 Remington",
+      "price": "500",
+      "category": "C1 c",
+      "condition": "État convenable",
+      "description": "Carabine à un coup Baïkal IJ-18, calibre 222 Remington.\nÉquipée d’une lunette Barska 6-24x50 sur colliers et d’un modérateur de son.\nVendue complète, le tout au prix indiqué.",
+      "photos": [
+        "mwnjwqei-1.jpg",
+        "mwnjwqei-2.jpg",
+        "mwnjwqei-3.jpg"
+      ],
+      "sold": false,
+      "date": "2026-11-19"
+    },
+    {
       "id": "mwm8gs01",
       "title": "Marlin 336, 30-30 Win, marquage JM",
       "caliber": "30-30 Winchester",
