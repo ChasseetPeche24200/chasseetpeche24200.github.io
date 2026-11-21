@@ -13,6 +13,21 @@
   },
   "listings": [
     {
+      "id": "mwqg7khy",
+      "title": "Remington 750 Woodmaster, 35 Whelen, hausse et guidon",
+      "caliber": "35 Whelen",
+      "price": "500",
+      "category": "C1 a",
+      "condition": "État convenable",
+      "description": "Carabine semi-automatique Remington 750 Woodmaster, calibre 35 Whelen.\nCanon de 47 cm, équipé d’une hausse et d’un guidon.\nCrosse et devant en bois quadrillé.\nLivrée avec sa bretelle en cuir.",
+      "photos": [
+        "mwqg7khy-1.jpg",
+        "mwqg7khy-2.jpg"
+      ],
+      "sold": false,
+      "date": "2026-11-21"
+    },
+    {
       "id": "mwnjwqei",
       "title": "Baïkal IJ-18, 222 Rem, lunette Barska et modérateur",
       "caliber": "222 Remington",
